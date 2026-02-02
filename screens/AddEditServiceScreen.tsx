@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView, View, KeyboardAvoidingView, Platform } from 'react-native';
+import { Text, StyleSheet, TextInput, TouchableOpacity, Alert, ScrollView, View, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -86,94 +86,106 @@ const AddEditServiceScreen: React.FC = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.container}
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
-    >
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.formSection}>
-          <Text style={styles.label}>Service Type</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={serviceType}
-              onValueChange={(value) => setServiceType(value)}
-              style={styles.picker}
-              itemStyle={styles.pickerItem}
-            >
-              <Picker.Item label="Engine Oil Change" value="Engine Oil Change" />
-              <Picker.Item label="Oil Filter Change" value="Oil Filter Change" />
-              <Picker.Item label="Air Filter" value="Air Filter" />
-              <Picker.Item label="Brake Inspection" value="Brake Inspection" />
-              <Picker.Item label="General Service" value="General Service" />
-              <Picker.Item label="Custom" value="Custom" />
-            </Picker>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.colors.background} />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>{isEditing ? 'Edit Service' : 'New Service'}</Text>
           </View>
-        </View>
 
-        {serviceType === 'Custom' && (
           <View style={styles.formSection}>
-            <Text style={styles.label}>Custom Service Name</Text>
-            <TextInput
-              style={styles.input}
-              value={customType}
-              onChangeText={setCustomType}
-              placeholder="E.g. Tire Rotation"
-              placeholderTextColor="#999"
-            />
-          </View>
-        )}
-
-        <View style={styles.row}>
-          <View style={[styles.formSection, { flex: 1, marginRight: theme.spacing.s }]}>
-            <Text style={styles.label}>Odometer (km)</Text>
-            <TextInput
-              style={styles.input}
-              value={odometer}
-              onChangeText={setOdometer}
-              placeholder="0"
-              placeholderTextColor="#999"
-              keyboardType="numeric"
-            />
+            <Text style={styles.label}>Service Type</Text>
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={serviceType}
+                onValueChange={(value) => setServiceType(value)}
+                style={styles.picker}
+                itemStyle={styles.pickerItem}
+                dropdownIconColor={theme.colors.textPrimary}
+              >
+                <Picker.Item label="Engine Oil Change" value="Engine Oil Change" />
+                <Picker.Item label="Oil Filter Change" value="Oil Filter Change" />
+                <Picker.Item label="Air Filter" value="Air Filter" />
+                <Picker.Item label="Brake Inspection" value="Brake Inspection" />
+                <Picker.Item label="General Service" value="General Service" />
+                <Picker.Item label="Custom" value="Custom" />
+              </Picker>
+            </View>
           </View>
 
-          <View style={[styles.formSection, { flex: 1, marginLeft: theme.spacing.s }]}>
-            <Text style={styles.label}>Interval (km)</Text>
+          {serviceType === 'Custom' && (
+            <View style={styles.formSection}>
+              <Text style={styles.label}>Custom Service Name</Text>
+              <TextInput
+                style={styles.input}
+                value={customType}
+                onChangeText={setCustomType}
+                placeholder="E.g. Tire Rotation"
+                placeholderTextColor={theme.colors.textSecondary}
+              />
+            </View>
+          )}
+
+          <View style={styles.row}>
+            <View style={[styles.formSection, { flex: 1, marginRight: theme.spacing.s }]}>
+              <Text style={styles.label}>Odometer (km)</Text>
+              <TextInput
+                style={styles.input}
+                value={odometer}
+                onChangeText={setOdometer}
+                placeholder="0"
+                placeholderTextColor={theme.colors.textSecondary}
+                keyboardType="numeric"
+              />
+            </View>
+
+            <View style={[styles.formSection, { flex: 1, marginLeft: theme.spacing.s }]}>
+              <Text style={styles.label}>Interval (km)</Text>
+              <TextInput
+                style={styles.input}
+                value={interval}
+                onChangeText={setInterval}
+                placeholder="0"
+                placeholderTextColor={theme.colors.textSecondary}
+                keyboardType="numeric"
+              />
+            </View>
+          </View>
+
+          <View style={styles.formSection}>
+            <Text style={styles.label}>Notes</Text>
             <TextInput
-              style={styles.input}
-              value={interval}
-              onChangeText={setInterval}
-              placeholder="0"
-              placeholderTextColor="#999"
-              keyboardType="numeric"
+              style={[styles.input, styles.textArea]}
+              value={notes}
+              onChangeText={setNotes}
+              placeholder="Add any additional details..."
+              placeholderTextColor={theme.colors.textSecondary}
+              multiline
+              textAlignVertical="top"
             />
           </View>
-        </View>
 
-        <View style={styles.formSection}>
-          <Text style={styles.label}>Notes</Text>
-          <TextInput
-            style={[styles.input, styles.textArea]}
-            value={notes}
-            onChangeText={setNotes}
-            placeholder="Add any additional details..."
-            placeholderTextColor="#999"
-            multiline
-            textAlignVertical="top"
-          />
-        </View>
-
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
-          <Text style={styles.saveButtonText}>
-            {isEditing ? 'Update Service' : 'Schedule Service'}
-          </Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </KeyboardAvoidingView>
+          <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+            <Text style={styles.saveButtonText}>
+              {isEditing ? 'UPDATE SERVICE' : 'SCHEDULE SERVICE'}
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
@@ -181,6 +193,16 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: theme.spacing.l,
     paddingBottom: 50,
+  },
+  header: {
+    marginBottom: theme.spacing.l,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+    paddingBottom: theme.spacing.s,
+  },
+  headerTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.textPrimary,
   },
   formSection: {
     marginBottom: theme.spacing.l,
@@ -194,6 +216,7 @@ const styles = StyleSheet.create({
     fontWeight: '600' as '600',
     marginBottom: theme.spacing.s,
     color: theme.colors.textSecondary,
+    fontSize: 14,
   },
   pickerContainer: {
     backgroundColor: theme.colors.inputBackground,
@@ -205,6 +228,7 @@ const styles = StyleSheet.create({
   picker: {
     height: 55,
     width: '100%',
+    color: theme.colors.textPrimary,
   },
   pickerItem: {
     fontSize: 16,
@@ -225,13 +249,15 @@ const styles = StyleSheet.create({
   saveButton: {
     backgroundColor: theme.colors.primary,
     padding: theme.spacing.m,
-    borderRadius: theme.borderRadius.m,
+    borderRadius: theme.borderRadius.l,
     alignItems: 'center',
     marginTop: theme.spacing.m,
-    ...theme.shadows.card,
+    ...theme.shadows.glow,
   },
   saveButtonText: {
     ...theme.typography.button,
+    fontWeight: '700', // Override weight for more emphasis
+    letterSpacing: 1,  // Override spacing
   },
 });
 

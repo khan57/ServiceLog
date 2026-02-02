@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Alert, SafeAreaView, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { loadData } from '../storage';
 import { ServiceEntry } from '../types';
@@ -34,7 +34,7 @@ const HistoryScreen: React.FC = () => {
   };
 
   const renderItem = ({ item }: { item: ServiceEntry }) => (
-    <TouchableOpacity style={styles.card} onPress={() => showDetail(item)}>
+    <TouchableOpacity style={styles.card} onPress={() => showDetail(item)} activeOpacity={0.7}>
       <View style={styles.cardRow}>
         <View>
           <Text style={styles.serviceType}>{item.serviceType}</Text>
@@ -48,27 +48,49 @@ const HistoryScreen: React.FC = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={history}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContent}
-        ListEmptyComponent={
-          <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>No service history yet.</Text>
-            <Text style={styles.emptySubText}>Completed services will appear here.</Text>
-          </View>
-        }
-      />
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="light-content" backgroundColor={theme.colors.background} />
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerTitle}>History</Text>
+        </View>
+        <FlatList
+          data={history}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyIcon}>🕒</Text>
+              <Text style={styles.emptyText}>No service history</Text>
+              <Text style={styles.emptySubText}>Completed services will appear here.</Text>
+            </View>
+          }
+        />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  },
   container: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  header: {
+    paddingHorizontal: theme.spacing.m,
+    paddingVertical: theme.spacing.m,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.border,
+  },
+  headerTitle: {
+    ...theme.typography.h2,
+    color: theme.colors.textPrimary,
   },
   listContent: {
     padding: theme.spacing.m,
@@ -78,6 +100,8 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.m,
     padding: theme.spacing.m,
     marginBottom: theme.spacing.s,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     ...theme.shadows.card,
   },
   cardRow: {
@@ -86,18 +110,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   serviceType: {
-    ...theme.typography.h2,
     fontSize: 16,
+    fontWeight: '600',
+    color: theme.colors.textPrimary,
     marginBottom: 4,
   },
   date: {
     ...theme.typography.caption,
+    color: theme.colors.textSecondary,
   },
   odometerBadge: {
     backgroundColor: theme.colors.background,
     paddingHorizontal: theme.spacing.m,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.borderRadius.l,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
   },
   odometerText: {
     color: theme.colors.primary,
@@ -110,6 +138,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 100,
   },
+  emptyIcon: {
+    fontSize: 40,
+    marginBottom: theme.spacing.m,
+    color: theme.colors.textSecondary,
+    opacity: 0.5,
+  },
   emptyText: {
     ...theme.typography.h2,
     color: theme.colors.textSecondary,
@@ -117,6 +151,7 @@ const styles = StyleSheet.create({
   },
   emptySubText: {
     ...theme.typography.body,
+    fontSize: 14,
     color: theme.colors.textSecondary,
   },
 });
