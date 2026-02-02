@@ -7,6 +7,11 @@
 
 ---
 
+## 📥 Download
+**[Download the latest Android APK](https://drive.google.com/file/d/1YonIhfc47hicagSbMnexLuaTDlcvBdH5/view?usp=sharing)**
+
+---
+
 ## 📖 About
 
 ServiceLog answers one simple question:
