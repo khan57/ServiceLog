@@ -1,0 +1,6 @@
+diff --git a/node_modules/react-native-sqlite-storage/platforms/android/build.gradle b/node_modules/react-native-sqlite-storage/platforms/android/build.gradle
+--- a/node_modules/react-native-sqlite-storage/platforms/android/build.gradle
++++ b/node_modules/react-native-sqlite-storage/platforms/android/build.gradle
+@@
+-        jcenter()
++        mavenCentral()

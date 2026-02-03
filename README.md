@@ -23,7 +23,7 @@ Built with privacy and simplicity in mind, ServiceLog stores all data locally on
 
 - **🎯 Precision Tracking**: Automatically calculates your next service due date based on your odometer and service interval.
 - **⚡ Offline-First**: Works 100% offline. No internet connection required.
-- **🔒 Privacy Focused**: all data is stored locally (AsyncStorage). We don't collect a single byte of personal data.
+- **🔒 Privacy Focused**: all data is stored locally (SQLite). We don't collect a single byte of personal data.
 - **🚀 Blazing Fast**: Launches in under 1 second. Zero bloat.
 - **📝 Service History**: Keep a clean log of all past maintenance (Oil, Brakes, Filters, etc.).
 - **⚙️ Customizable**: Set your preferred default service intervals.
@@ -34,7 +34,7 @@ ServiceLog is built with modern mobile web technologies for performance and main
 
 - **Core**: [React Native](https://reactnative.dev/) (v0.83)
 - **Language**: [TypeScript](https://www.typescriptlang.org/) (Strict typing)
-- **Storage**: [`@react-native-async-storage/async-storage`](https://github.com/react-native-async-storage/async-storage)
+- **Storage**: [`react-native-sqlite-storage`](https://github.com/andpor/react-native-sqlite-storage)
 - **Navigation**: [React Navigation 7](https://reactnavigation.org/)
 - **Styling**: Custom Theme System (No heavy UI libraries)
 
